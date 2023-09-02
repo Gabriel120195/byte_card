@@ -1,3 +1,5 @@
+import re
+
 class Cartao:
     def __init__(self, numero, validade, cvv, limite, cliente):
         self.__numero = numero
@@ -7,6 +9,7 @@ class Cartao:
         self.__cliente = cliente
         self.__status = "ATIVO"
 
+        
     def cancelar(self):
         self.__status = "CANCELADO"
 
@@ -46,9 +49,16 @@ class Compra:
     def __init__(self, valor, data, estabelecimento, categoria, cartao):
         self.__valor = valor 
         self.__data = data 
-        self.__estabelecimento = estabelecimento 
-        self.__categoria = categoria 
-        self.__cartao = cartao 
+        self.__estabelecimento = estabelecimento.strip() 
+        self.__categoria = categoria.strip()
+        self.__cartao = cartao
+
+        if len(self.__estabelecimento) > 10:
+            print(f'Nome do estabelecimento grande: {self.__estabelecimento}') 
+
+        dia_da_compra = self.__data.strftime('%d/%m/%Y')
+        hora_da_compra = self.__data.strftime('%H:%M:%S')
+        print(f'Compra realizada no dia {dia_da_compra} na hora {hora_da_compra}')
 
     def __str__(self):
         return f'Compra: {self.__valor}no dia {self.__data} em {self.__estabelecimento} no cartão {self.__cartao.numero}'
