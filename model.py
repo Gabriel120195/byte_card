@@ -72,11 +72,15 @@ class Compra:
         print(f'Compra realizada no dia {dia_da_compra} na hora {hora_da_compra}')
 
     def __str__(self):
-        return f'Compra: {self.__valor}no dia {self.__data} em {self.__estabelecimento} no cartão {self.__cartao.numero}'
+        return f'Compra: {self.__valor} no dia {self.__data} em {self.__estabelecimento} no cartão {self.__cartao.numero}'
 
     @property
     def valor(self):
         return self.__valor
+
+    @property
+    def categoria(self):
+        return self.__categoria
 
 
 class CompraCredito(Compra):

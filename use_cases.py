@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import date, datetime
 from model import Cartao, Compra, cria_cvv_do_cartao, cria_numero_cartao, define_validade_do_cartao
 
@@ -25,17 +26,19 @@ cartao3 = Cartao(cria_numero_cartao(),
 
 banco_compras = []
 
-banco_cartoes = [cartao1, cartao2, cartao3]
+banco_cartoes = {
+    cartao1.id: cartao1,
+    cartao2.id: cartao2,
+    cartao3.id: cartao3
+}
 
 sequencia_ids = 4
 
 def lista_cartoes():
-    return banco_cartoes
+    return banco_cartoes.values()
 
 def pesquisa_cartao_por_id(id):
-    for cartao in banco_cartoes:
-        if cartao.id == id:
-            return cartao
+    return banco_cartoes.get(id)
 
 def cadastra_cartao(cliente, limite):
     global sequencia_ids, banco_cartoes
@@ -46,7 +49,7 @@ def cadastra_cartao(cliente, limite):
 
     novo_cartao = Cartao(numero=numero, validade=validade, cvv=cvv, limite=limite, cliente=cliente, id=sequencia_ids)
 
-    banco_cartoes.append(novo_cartao)
+    banco_cartoes[novo_cartao.id] = novo_cartao
 
     sequencia_ids += 1
 
@@ -66,7 +69,15 @@ def cadastra_compra(cartao_id, valor, categoria, estabelecimento):
 
     banco_compras.append(nova_compra)
 
+def lista_compras():
+    return banco_compras
 
+def monta_relatorio_gastos_por_categoria():
+    gasto_por_categoria = defaultdict(float)
+    for compra in lista_compras():
+        gasto_por_categoria[compra.categoria] += compra.valor
+
+    return gasto_por_categoria
 
 
 
