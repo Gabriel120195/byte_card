@@ -1,14 +1,17 @@
 from random import randint
 from datetime import date
 from dateutil.relativedelta import relativedelta
+from excecoes import ValorExcedidoException 
 import re
+
+
 class Cartao:
     def __init__(self, numero, validade, cvv, limite, cliente, id = None):
         self.__numero = numero
         self.__validade = validade
         self.__cvv = cvv
-        self.__limite = limite
-        self.__cliente = cliente
+        self.__set__limite(limite)
+        self.__set_cliente(cliente)
         self.__status = "ATIVO"
         self.__id = id
 
@@ -41,7 +44,7 @@ class Cartao:
 
     @limite.setter
     def limite(self, limite):
-         self.__limite = limite
+         self.__set_limite(limite)
 
     @property
     def cliente(self):
@@ -55,14 +58,37 @@ class Cartao:
         return (f'Cartão(#{self.id}) {self.numero} do(a) {self.cliente} com limite de {self.limite} válido até {self.validade}')
 
 
+    def __set__limite(self, limite):
+        limite_minimo = 10
+        
+        if limite < limite_minimo:
+            raise ValueError(f'O limite deve ser de no mínimo {limite_minimo}')
+        
+        self.__limite = limite
+
+
+    def __set_cliente(self, cliente):
+        if not isinstance(cliente, str) or len(cliente.split()) != 2:
+            raise ValueError("Cliente deve conter exatamente dois nomes separados por espaço.")
+            
+        nomes = cliente.split()
+        for nome in nomes:
+            if len(nome) < 2:
+                raise ValueError("Cada nome deve ter pelo menos dois caracteres.")
+            
+        self.__cliente = cliente
+
+
+
 class Compra:
     def __init__(self, valor, data, estabelecimento, categoria, cartao, id = None):
-        self.__valor = valor 
+        self.__set__valor(valor) 
         self.__data = data 
-        self.__estabelecimento = estabelecimento.strip() 
+        self.__set__estabelecimento(estabelecimento) 
         self.__categoria = categoria.strip()
-        self.__cartao = cartao
+        self.__set__cartao(cartao)
         self.__id = id
+        self.valida_compra()
 
         if len(self.__estabelecimento) > 10:
             print(f'Nome do estabelecimento grande: {self.__estabelecimento}') 
@@ -81,6 +107,39 @@ class Compra:
     @property
     def categoria(self):
         return self.__categoria
+
+
+    def __set__estabelecimento(self, estabelecimento):
+        limite_caracteres = 30
+        tamanho_estabelecimento = len(estabelecimento)
+        
+        if tamanho_estabelecimento > limite_caracteres:
+            raise ValueError(f'Estabelecimento com {tamanho_estabelecimento} caracteres é superior ao limite de {limite_caracteres} caracteres')
+    
+        self.__estabelecimento = estabelecimento.strip()
+
+
+    def __set__valor(self, valor):
+        if valor <= 0:
+            raise ValueError(f"O valor {valor} deve ser superior a zero")
+        
+        self.__valor = valor
+
+
+    def __set__cartao(self, cartao):
+        if cartao is None:
+            raise ValueError("É obrigatório um cartão")
+        
+        self.__cartao = cartao
+
+
+    def valida_compra(self):
+        limite = self.__cartao.limite
+        valor = self.__valor
+        
+        if valor > limite:
+            valor_excedido = valor - limite
+            raise ValorExcedidoException(f'O valor da compra excedeu ${valor_excedido} do limite') 
 
 
 class CompraCredito(Compra):
@@ -113,16 +172,7 @@ def define_validade_do_cartao():
     return validade
 
 
-
-
-
-
-
-
-
-
-
-
+    
 
 
 
