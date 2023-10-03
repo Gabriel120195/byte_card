@@ -47,6 +47,4 @@ except Exception as e:
 try:
     use_cases.cadastra_compra(1, 50_000.0, 'Alimentação', 'Pizza Dois Pedaços') 
 except Exception as e:
-    print(e) 
-
-
+    print(e)
