@@ -1,6 +1,20 @@
 from collections import defaultdict
 from datetime import date, datetime
-from model import Cartao, Compra, cria_cvv_do_cartao, cria_numero_cartao, define_validade_do_cartao
+from random import randint
+from model import Cartao, Compra
+from dateutil.relativedelta import relativedelta
+
+def cria_numero_cartao():
+    grupos_de_numeros = [f'{randint(1, 9999):04}' for i in range(4)]
+    return ' '.join(grupos_de_numeros)
+
+def cria_cvv_do_cartao():
+    cvv = f'{randint(1, 999):03}'
+    return cvv
+
+def define_validade_do_cartao():
+    validade = date.today() + relativedelta(years=4, months=6, day=31)
+    return validade
 
 
 cartao1 = Cartao(cria_numero_cartao(),
@@ -78,17 +92,3 @@ def monta_relatorio_gastos_por_categoria():
         gasto_por_categoria[compra.categoria] += compra.valor
 
     return gasto_por_categoria
-
-
-
-
-
-
-
-
-
-
-
-
-
-
