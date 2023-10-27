@@ -38,12 +38,21 @@ cartao3 = Cartao(cria_numero_cartao(),
                  'Bruce Wayne',
                  id=3)
 
+cartao4 = Cartao(cria_numero_cartao(),
+                 date(2029, 5, 31),
+                 '812',
+                 10000.0,
+                 'Teste Teste',
+                 id=4)
+
+
 banco_compras = []
 
 banco_cartoes = {
     cartao1.id: cartao1,
     cartao2.id: cartao2,
-    cartao3.id: cartao3
+    cartao3.id: cartao3,
+    cartao4.id: cartao4
 }
 
 sequencia_ids = 4
@@ -92,3 +101,16 @@ def monta_relatorio_gastos_por_categoria():
         gasto_por_categoria[compra.categoria] += compra.valor
 
     return gasto_por_categoria
+def define_limite(cartao_id, limite):
+    cartao = pesquisa_cartao_por_id(cartao_id)
+    cartao.limite = limite
+
+
+def cancela_cartao(cartao_id):
+    cartao = pesquisa_cartao_por_id(cartao_id)
+    cartao.cancela()
+
+
+def ativa_cartao(cartao_id):
+    cartao = pesquisa_cartao_por_id(cartao_id)
+    cartao.ativa()

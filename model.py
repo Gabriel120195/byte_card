@@ -11,10 +11,10 @@ class Cartao:
         self.__id = id
 
         
-    def cancelar(self):
+    def cancela(self):
         self.__status = "CANCELADO"
 
-    def ativar(self):
+    def ativa(self):
         self.__status = "ATIVO"
 
     @property
@@ -39,7 +39,7 @@ class Cartao:
 
     @limite.setter
     def limite(self, limite):
-         self.__set_limite(limite)
+         self.__set__limite(limite)
 
     @property
     def cliente(self):
